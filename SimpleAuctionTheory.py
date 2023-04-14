@@ -45,6 +45,7 @@ class Auction:
                 self.q_table[n,self.bids[n]] = NewQValue
                 print("Bidder " + str(n) + " Q Value update from " + str(OldQValue) + " to " + str(NewQValue))
                 self.rewardtable.append(reward)
+                self.epsilon = self.epsilon/1.01
             else:
                 print("Losing bidder " + str(n))
                 reward = -self.fee
@@ -54,17 +55,18 @@ class Auction:
                 print("Bidder " + str(n) + " Q Value update from " + str(OldQValue) + " to " + str(NewQValue))
         self.bids = []
         return
-n_bidders = 5
-value = 5
+n_bidders = 20
+value = 20
 fee = 1
-alpha = 0.1
+alpha = 0.3
 gamma = 0.99
 epsilon = 0.1
-numinstances = 100
+numinstances = 1000
 
 A = Auction(n_bidders, value, fee, alpha, gamma, epsilon)
 for k in range(0,numinstances):
     A.run_auction()
-B = plt.plot(range(0,numinstances),A.rewardtable, ls = '-')
-
-B.show()
+plt.plot(range(0,numinstances),A.rewardtable, ls = '-')
+plt.xlabel("Iterations (nbidders = " + str(n_bidders) + ", alpha = " + str(alpha) + ", gamma = " + str(gamma) + ", epsilon = " + str(epsilon) + "(Decaying))")
+plt.ylabel("Reward per Auction")
+plt.show()
